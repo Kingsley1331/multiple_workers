@@ -23,7 +23,7 @@ export const CurrentUsers = () => {
         console.log("SET PAGE MEMBERS LISTENER");
         setNumberOfUsers(numOfUsers);
       });
-    }, 1000);
+    }, 500);
   }, [setNumberOfUsers]);
 
   useEffect(() => {
