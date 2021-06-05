@@ -10,7 +10,6 @@ export const CurrentUsers = () => {
 
   useEffect(() => {
     socket = io("http://localhost:4000");
-    console.log("socket", socket);
   }, []);
 
   useEffect(() => {
@@ -37,11 +36,7 @@ export const CurrentUsers = () => {
 
   return (
     <div className="App">
-      <h1>Socket ids</h1>
-      {otherUsers[appointmentId]?.length > 1 && (
-        <h2>This appointment is currently being worked on!</h2>
-      )}
-
+      {otherUsers[appointmentId]?.length > 1 && <h2>Being worked on!</h2>}
       <h3>{`Number of users: ${otherUsers[appointmentId]?.length}`}</h3>
     </div>
   );
