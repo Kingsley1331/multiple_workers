@@ -4,13 +4,9 @@ import { io } from "socket.io-client";
 
 let socket;
 
-export const CurrentUsers = (props) => {
-  const [members, setMembers] = useState([]);
-  const [numberOfUsers, setNumberOfUsers] = useState(0);
+export const CurrentUsers = () => {
   const [otherUsers, setOthersUsers] = useState({});
   const { appointmentId } = useParams();
-  // console.log("props", props);
-  console.log("===============================================");
 
   useEffect(() => {
     socket = io("http://localhost:4000");
@@ -22,18 +18,10 @@ export const CurrentUsers = (props) => {
       socket = io("http://localhost:4000");
     }
 
-    // setTimeout(() => {
     socket.on("connect", () => {
-      socket.emit("custom-event", "Kingsley Ankomah", socket.id);
-
       socket.emit("send-appointment-data", {
         appointmentId,
         socketId: socket.id,
-      });
-
-      socket.on("number-of-users", (numOfUsers) => {
-        console.log("SET PAGE MEMBERS LISTENER1");
-        setNumberOfUsers(numOfUsers);
       });
 
       socket.on("appointment-data", (data) => {
@@ -42,28 +30,10 @@ export const CurrentUsers = (props) => {
       });
     });
 
-    // }, 500);
-
     return () => {
-      console.log(
-        "============================================socket disconnected2"
-      );
       socket.disconnect();
     };
-  }, [setNumberOfUsers, appointmentId]);
-
-  useEffect(() => {
-    console.log("SET PAGE MEMBERS LISTENER2");
-    socket.on("page-members", (id) => {
-      setMembers((list) => [...list, id]);
-    });
-    return () => {
-      console.log(
-        "============================================socket disconnected"
-      );
-      socket.disconnect();
-    };
-  }, [setMembers]);
+  }, [appointmentId]);
 
   return (
     <div className="App">
@@ -71,16 +41,8 @@ export const CurrentUsers = (props) => {
       {otherUsers[appointmentId]?.length > 1 && (
         <h2>This appointment is currently being worked on!</h2>
       )}
-      {/* {numberOfUsers > 1 && (
-        <h2>This appointment is currently being worked on!</h2>
-      )} */}
+
       <h3>{`Number of users: ${otherUsers[appointmentId]?.length}`}</h3>
-      {/* <h3>{`Number of users: ${numberOfUsers}`}</h3> */}
-      <ul>
-        {members.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
     </div>
   );
 };
