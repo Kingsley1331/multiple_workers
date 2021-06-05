@@ -1,35 +1,55 @@
-import React from "react";
+import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { io } from "socket.io-client";
 import { CurrentUsers } from "./components/CurrentUsers";
 
+const socket = io("http://localhost:4000");
+
 export default function BasicExample() {
+  const appointmentIds = ["121", "122", "123", "124", "125"];
+  const [occupiedIds, setOccupiedIds] = useState([]);
+
+  socket.on("connect", () => {
+    socket.on("appointment-data", (data) => {
+      const currentIds = [];
+      for (let id in data) {
+        if (data[id].length) {
+          currentIds.push(id);
+        }
+      }
+      console.log("currentIds", currentIds);
+      setOccupiedIds(currentIds);
+    });
+  });
+
   return (
     <Router>
       <div>
-        <ul>
+        <ul style={{ listStyleType: "none" }}>
           <li>
             <Link to="/">Home</Link>
           </li>
           <li>
             <Link to="/about">About</Link>
           </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/currentUsers">Current Users</Link>
-          </li>
+          {appointmentIds.map((id, idx) => {
+            const isAppointmentOccupied = occupiedIds.some(
+              (appId) => appId === id
+            );
+            const color = isAppointmentOccupied ? "red" : "black";
+            return (
+              <li>
+                <Link
+                  style={{ color }}
+                  to={`/appointment/${id}`}
+                >{`Appointment ${idx + 1}`}</Link>
+              </li>
+            );
+          })}
         </ul>
 
         <hr />
 
-        {/*
-          A <Switch> looks through all its children <Route>
-          elements and renders the first one whose path
-          matches the current URL. Use a <Switch> any time
-          you have multiple routes, but you want only one
-          of them to render at a time
-        */}
         <Switch>
           <Route exact path="/">
             <div className="App">
@@ -39,12 +59,7 @@ export default function BasicExample() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/currentUsers">
-            <CurrentUsers />
-          </Route>
+          <Route path="/appointment/:appointmentId" component={CurrentUsers} />
         </Switch>
       </div>
     </Router>
@@ -62,14 +77,6 @@ function Home() {
   return (
     <div>
       <h2>Home</h2>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
     </div>
   );
 }
