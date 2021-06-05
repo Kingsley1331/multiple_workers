@@ -14,10 +14,13 @@ export default function BasicExample() {
             <Link to="/about">About</Link>
           </li>
           <li>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/appointment/121">Appointment 1</Link>
           </li>
           <li>
-            <Link to="/currentUsers">Current Users</Link>
+            <Link to="/appointment/122">Appointment 2</Link>
+          </li>
+          <li>
+            <Link to="/appointment/123">Appointment 3</Link>
           </li>
         </ul>
 
@@ -39,12 +42,7 @@ export default function BasicExample() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/currentUsers">
-            <CurrentUsers />
-          </Route>
+          <Route path="/appointment/:appointmentId" component={CurrentUsers} />
         </Switch>
       </div>
     </Router>
@@ -62,14 +60,6 @@ function Home() {
   return (
     <div>
       <h2>Home</h2>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
     </div>
   );
 }
