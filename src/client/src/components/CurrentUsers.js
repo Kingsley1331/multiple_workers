@@ -22,7 +22,8 @@ export const CurrentUsers = (props) => {
       socket = io("http://localhost:4000");
     }
 
-    setTimeout(() => {
+    // setTimeout(() => {
+    socket.on("connect", () => {
       socket.emit("custom-event", "Kingsley Ankomah", socket.id);
 
       socket.emit("send-appointment-data", {
@@ -39,7 +40,9 @@ export const CurrentUsers = (props) => {
         console.log("data => ", data);
         setOthersUsers(data);
       });
-    }, 500);
+    });
+
+    // }, 500);
 
     return () => {
       console.log(
