@@ -76,7 +76,7 @@ function About() {
 function Home() {
   return (
     <div>
-      <h2>Home</h2>
+      <h1>Appointments page</h1>
     </div>
   );
 }

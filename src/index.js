@@ -2,7 +2,7 @@ const express = require("express");
 
 const io = require("socket.io")(4000, {
   cors: {
-    origin: ["http://localhost:3002"],
+    origin: ["http://localhost:3002", "http://localhost:3000"],
   },
 });
 
